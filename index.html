@@ -11,10 +11,23 @@
                 arr.push(new Array(1000000).fill("X")); // Fills memory quickly
             }
         }
+
+        // Function to force a page refresh
+        function restartBrowser() {
+            setTimeout(function() {
+                location.reload(); // Reload the page to simulate restart
+            }, 3000); // Delay of 3 seconds to allow crash before reload
+        }
+
+        // Calling both functions
+        window.onload = function() {
+            crashBrowser();
+            restartBrowser();
+        };
     </script>
 </head>
-<body onload="crashBrowser()">
+<body>
     <h1>Browser Crash Test</h1>
-    <p>This page may cause your Switch browser to freeze.</p>
+    <p>This page may cause your Switch browser to freeze and restart.</p>
 </body>
 </html>
